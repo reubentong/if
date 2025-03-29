@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.asyncio
 async def test_fetch_breeds(mock_dog_api):
     mock_dog_api.fetch_breeds.return_value = {"breeds": ["Labrador", "Poodle"]}

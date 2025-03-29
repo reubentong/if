@@ -8,7 +8,8 @@ from app.config import Settings
 class DogAPI:
     def __init__(self, settings: Settings):
         self.client = httpx.AsyncClient(
-            base_url=settings.DOG_API_BASE_URL, timeout=settings.DOG_API_TIMEOUT_S,
+            base_url=settings.DOG_API_BASE_URL,
+            timeout=settings.DOG_API_TIMEOUT_S,
         )
 
     async def fetch_breeds(self) -> dict[str, Any]:

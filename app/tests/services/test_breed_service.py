@@ -32,7 +32,7 @@ async def test_filter_by_name(
 
 
 @pytest.mark.asyncio
-async def test_filter_by_name(
+async def test_filter_by_name_not_in_data(
     breed_service: BreedService, breeds: BreedsResponse
 ) -> None:
     response = await breed_service.get_breeds(name="Labrador")

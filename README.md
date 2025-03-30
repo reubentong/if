@@ -1,9 +1,9 @@
 # Infinity Fiction Task
 
 Here's my dog winning a sausage catching competition,
-his breed was 404 however.
+his breed is not in the dataset, sadge.
 
-![Imgur Image](https://imgur.com/a/7jhUSpS)
+![Image](albus.jpeg)
 
 ## Setup & Run
 
@@ -175,6 +175,18 @@ or
   "links": null
 }
 ```
+
+### Tests, Black, Mypy
+
+Can run these minor features with:
+
+```console
+    pytest app/
+    black app/ 
+    mypy app/
+```
+
+mypy has strict setting.
 
 Look forward to discussing :)
 

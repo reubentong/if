@@ -1,8 +1,10 @@
+import uuid
+
 from pydantic import BaseModel
 
 
 class GroupData(BaseModel):
-    id: str
+    id: uuid.UUID
     type: str
 
 
@@ -34,12 +36,31 @@ class BreedAttributes(BaseModel):
 
 
 class Breed(BaseModel):
-    id: str
+    id: uuid.UUID
     type: str
     attributes: BreedAttributes
     relationships: BreedRelationships
 
 
-class DogAPIBreedResponse(BaseModel):
-    data: Breed
-    links: dict
+class Pagination(BaseModel):
+    current: int | None = None
+    next: int | None = None
+    last: int | None = None
+    records: int | None = None
+
+
+class Meta(BaseModel):
+    pagination: Pagination
+
+
+class Links(BaseModel):
+    self: str | None = None
+    current: str | None = None
+    next: str | None = None
+    last: str | None = None
+
+
+class BreedsResponse(BaseModel):
+    data: list[Breed]
+    meta: Meta | None = None
+    links: Links | None = None

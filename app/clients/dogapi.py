@@ -12,7 +12,7 @@ class DogAPIClient:
             timeout=settings.DOG_API_TIMEOUT_S,
         )
 
-    async def fetch_breeds(self, page: int | None = 1) -> dict[str, Any]:
+    async def fetch_breeds(self, page: int | None = None) -> dict[str, Any]:
         try:
             params = {}
             if page:

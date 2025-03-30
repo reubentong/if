@@ -1,10 +1,23 @@
-import json
-from typing import Any, Dict
+import uuid
+from unittest.mock import AsyncMock
 
 import pytest
 
+from app.clients.dogapi import DogAPIClient
 from app.config import Settings
-from app.services.clients.dogapi import DogAPIClient
+from app.schemas.schema import (
+    BreedsResponse,
+    Breed,
+    Meta,
+    Pagination,
+    BreedAttributes,
+    BreedLifeSpan,
+    BreedWeight,
+    BreedRelationships,
+    GroupRelationship,
+    GroupData,
+)
+from app.services.breed_service import BreedService
 
 
 @pytest.fixture
@@ -13,12 +26,38 @@ def settings() -> Settings:
 
 
 @pytest.fixture
-def dog_api(settings: Settings) -> DogAPIClient:
-    return DogAPIClient(settings=settings)
+def mock_dog_api(breeds: BreedsResponse) -> AsyncMock:
+    mock_client = AsyncMock()
+    mock_client.fetch_breeds.return_value = breeds.model_dump()
+    return mock_client
 
 
 @pytest.fixture
-def mock_breeds_response() -> dict[str, Any]:
-    with open("app/tests/fixtures/breeds.json", "r") as f:
-        json_fixture: dict[str, Any] = json.load(f)
-        return json_fixture
+def breed_service(mock_dog_api: DogAPIClient) -> BreedService:
+    return BreedService(mock_dog_api)
+
+
+@pytest.fixture
+def breeds() -> BreedsResponse:
+    return BreedsResponse(
+        data=[
+            Breed(
+                id=uuid.uuid4(),
+                type="breed",
+                attributes=BreedAttributes(
+                    name="Golden Doodle",
+                    description="Reuben's Dog",
+                    life=BreedLifeSpan(max=9999, min=100),
+                    male_weight=BreedWeight(max=75, min=65),
+                    female_weight=BreedWeight(max=65, min=55),
+                    hypoallergenic=False,
+                ),
+                relationships=BreedRelationships(
+                    group=GroupRelationship(
+                        data=GroupData(id=uuid.uuid4(), type="group")
+                    )
+                ),
+            ),
+        ],
+        meta=Meta(pagination=Pagination(next=None)),
+    )

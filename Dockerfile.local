@@ -1,0 +1,22 @@
+ARG PYTHON_VERSION=3.12.0
+# Protect linux compatibility (I'm on mac)
+ARG PLATFORM=linux/amd64
+FROM --platform=${PLATFORM} python:${PYTHON_VERSION}-slim-bullseye AS build
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+FROM --platform=${PLATFORM} python:${PYTHON_VERSION}-slim-bullseye AS runtime
+
+WORKDIR /app
+
+COPY --from=build /app /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8000
+COPY . .
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
